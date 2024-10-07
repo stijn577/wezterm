@@ -7,11 +7,13 @@ local config = {}
 config.default_prog = { "C:/Users/Stijn_Admin/AppData/Local/Programs/nu/bin/nu.exe" }
 
 -- theme and background settings
-config.window_decorations = "RESIZE"
-config.use_fancy_tab_bar = false
-config.tab_max_width = 50
 config.color_scheme = "Catppuccin Macchiato"
-local opacity = 1.0
+
+-- window
+config.window_decorations = "RESIZE"
+
+-- opacity
+local opacity = 0.85
 config.window_background_opacity = opacity
 
 local increase_opacity = function(window, pane)
@@ -30,6 +32,11 @@ local decrease_opacity =  function(window, pane)
   window:set_config_overrides({ window_background_opacity = opacity })
 end
 
+-- tab bar
+config.use_fancy_tab_bar = false
+-- config.tab_bar_at_bottom = true
+config.tab_max_width = 50
+
 -- font settings
 config.font = wezterm.font(
   -- {"ZedMono Nerd Font Propo", { weight="Regular", stretch="Expanded", style="Normal" }},
@@ -40,24 +47,32 @@ config.font = wezterm.font(
 config.harfbuzz_features = { "CLIK=1" }
 config.font_size = 12.25
 
+config.leader = { key = 'q', mods = 'ALT', timeout_milliseconds = 2000 }
 config.keys = {
   -- disable ctrl + shift + t
   { key = 't', mods = 'SHIFT | CTRL', action = action.DisableDefaultAssignment },
   
-  -- increase opacitiy
-  { key = 'UpArrow', mods = 'SHIFT | CTRL', action = wezterm.action_callback(increase_opacity) },
+  -- increase opacity
+  { key = 'UpArrow', mods = 'LEADER', action = wezterm.action_callback(increase_opacity) },
   -- decrease opacity
-  { key = 'DownArrow', mods = 'SHIFT | CTRL', action = wezterm.action_callback(decrease_opacity) },
+  { key = 'DownArrow', mods = 'LEADER', action = wezterm.action_callback(decrease_opacity) },
   
   -- bind F11 to full screen
   { key = 'F11', action = action.ToggleFullScreen },
   -- bind ctrl + n to new tab
-  { key = 'n', mods = 'CTRL', action = action.SpawnTab 'DefaultDomain' },
+  { key = 't', mods = 'CTRL', action = action.SpawnTab 'DefaultDomain' },
+
+  -- split view
+  { key = '\'', mods = 'CTRL', action = action.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  { key = '\"', mods = 'CTRL | SHIFT', action = action.SplitVertical { domain = 'CurrentPaneDomain' } },
+
   -- navigate panes
-  { key = 'LeftArrow', mods = 'ALT', action = action.ActivatePaneDirection ('Left')},
-  { key = 'RightArrow', mods = 'ALT', action = action.ActivatePaneDirection ('Right')},
-  { key = 'UpArrow', mods = 'ALT', action = action.ActivatePaneDirection ('Up')},
-  { key = 'DownArrow', mods = 'ALT', action = action.ActivatePaneDirection ('Down')},
+  { key = 'h', mods = 'LEADER', action = action.ActivatePaneDirection 'Left' },
+  { key = 'j', mods = 'LEADER', action = action.ActivatePaneDirection 'Down' },
+  { key = 'k', mods = 'LEADER', action = action.ActivatePaneDirection 'Up' },
+  { key = 'l', mods = 'LEADER', action = action.ActivatePaneDirection 'Right' },
+
+  { key = 'r', mods = 'LEADER', action = action.RotatePanes 'Clockwise' },
 }
 
 return config
