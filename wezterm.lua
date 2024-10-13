@@ -13,7 +13,7 @@ config.color_scheme = "Catppuccin Macchiato"
 config.window_decorations = "RESIZE"
 
 -- opacity
-local opacity = 0.85
+local opacity = 1.0
 config.window_background_opacity = opacity
 
 local increase_opacity = function(window, pane)
@@ -35,7 +35,7 @@ end
 -- tab bar
 config.use_fancy_tab_bar = false
 -- config.tab_bar_at_bottom = true
-config.tab_max_width = 50
+config.tab_max_width = 25
 
 -- font settings
 config.font = wezterm.font(
