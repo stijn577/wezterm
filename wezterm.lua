@@ -92,26 +92,26 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
       { Background = { Color = "#24273a" } },
       { Foreground = { Color = "#c6a0f6" } },
       { Text = first_tab and "" or SOLID_LEFT_ARROW .. SOLID_LEFT_ARROW_INVERSE },
-      { Background = { Color = "#313244" } },
+      { Background = { Color = "#24273a" } },
       { Foreground = { Color = "#a6adc8" } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
     }
   elseif tab.tab_index == active_tab_index then
     return {
-      { Background = { Color = "#313244" } },
+      { Background = { Color = "#24273a" } },
       { Foreground = { Color = "#c6a0f6" } },
       { Text = first_tab and "" or SOLID_LEFT_ARROW },
       { Background = { Color = "#c6a0f6" } },
       { Foreground = { Color = "#313244" } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-      { Background = { Color = "#313244" } },
+      { Background = { Color = "#24273a" } },
       { Foreground = { Color = "#c6a0f6" } },
       { Text = last_tab and "" or SOLID_RIGHT_ARROW },
     }
   else
     return {
       { Background = { Color = "#24273a" } },
-      { Foreground = { Color = "#6c7086" } },
+      { Foreground = { Color = "#a6adc8" } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
       { Background = { Color = "#24273a" } },
       { Foreground = { Color = "#c6a0f6" } },
