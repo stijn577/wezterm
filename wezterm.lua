@@ -8,24 +8,7 @@ config.default_prog = { "C:/Users/Stijn_Admin/AppData/Local/Programs/nu/bin/nu.e
 
 
 -- theme and background settings
-function scheme_for_appearance(appearance)
-  if appearance:find "Dark" then
-    return "Catppuccin Macchiato"
-  else
-    return "Catppuccin Latte"
-  end
-end
-
-function change_scheme_appearance(appearance)
-  if appearance:find "Dark" then
-    appearance:set "Light"
-  else
-    appearance:set "Dark"
-  end
-end
-
-
-config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
+config.color_scheme = "Catppuccin Macchiato"
 
 -- renderer
 config.front_end = "OpenGL"
@@ -36,89 +19,89 @@ config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 
 
 -- opacity
-local opacity = 1.0
-config.window_background_opacity = opacity
+local opacity_local = 1.0
+config.window_background_opacity = opacity_local
 
 local increase_opacity = function(window, pane)
-  opacity = opacity + 0.05
-  if opacity > 1.0 then
-    opacity = 1.0
+  opacity_local = opacity_local + 0.05
+  if opacity_local > 1.0 then
+    opacity_local = 1.0
   end
-  window:set_config_overrides({ window_background_opacity = opacity })
+  window:set_config_overrides({ window_background_opacity = opacity_local })
 end
 
 local decrease_opacity =  function(window, pane)
-  opacity = opacity - 0.05
-  if opacity < 0.1 then
-    opacity = 0.1
+  opacity_local = opacity_local - 0.05
+  if opacity_local < 0.1 then
+    opacity_local = 0.1
   end
-  window:set_config_overrides({ window_background_opacity = opacity })
+  window:set_config_overrides({ window_background_opacity = opacity_local })
 end
 
 
 -- tab bar
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false 
-config.hide_tab_bar_if_only_one_tab = true
+config.hide_tab_bar_if_only_one_tab = false
 config.tab_max_width = 1000
 
 -- tab bar style scripting
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-  local get_active_tab_index = function(tabs)
-    for _, t in pairs(tabs) do
-      if t.is_active then
-        return t.tab_index
-      end
-    end
-  end
+-- wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+--   local get_active_tab_index = function(tabs)
+--     for _, t in pairs(tabs) do
+--       if t.is_active then
+--         return t.tab_index
+--       end
+--     end
+--   end
 
-  local SOLID_LEFT_ARROW = wezterm.nerdfonts.pl_right_hard_divider
-  local SOLID_RIGHT_ARROW = wezterm.nerdfonts.pl_left_hard_divider
-  local SOLID_LEFT_ARROW_INVERSE = ""
-  local SOLID_RIGHT_ARROW_INVERSE = ""  
+--   local SOLID_LEFT_ARROW = wezterm.nerdfonts.pl_right_hard_divider
+--   local SOLID_RIGHT_ARROW = wezterm.nerdfonts.pl_left_hard_divider
+--   local SOLID_LEFT_ARROW_INVERSE = ""
+--   local SOLID_RIGHT_ARROW_INVERSE = ""  
 
-  local title = tab.active_pane.title
-  local active_tab_index = get_active_tab_index(tabs)
+--   local title = tab.active_pane.title
+--   local active_tab_index = get_active_tab_index(tabs)
 
-  if tab.tab_title and #tab.tab_title > 0 then
-    title = tab.tab_title
-  end
+--   if tab.tab_title and #tab.tab_title > 0 then
+--     title = tab.tab_title
+--   end
 
-  local first_tab = tab.tab_index == 0
-  local last_tab = tab.tab_index == (#tabs - 1)
+--   local first_tab = tab.tab_index == 0
+--   local last_tab = tab.tab_index == (#tabs - 1)
 
-  if tab.tab_index < active_tab_index then
-    return {
-      { Background = { Color = "#24273a" } },
-      { Foreground = { Color = "#c6a0f6" } },
-      { Text = first_tab and "" or SOLID_LEFT_ARROW .. SOLID_LEFT_ARROW_INVERSE },
-      { Background = { Color = "#24273a" } },
-      { Foreground = { Color = "#a6adc8" } },
-      { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-    }
-  elseif tab.tab_index == active_tab_index then
-    return {
-      { Background = { Color = "#24273a" } },
-      { Foreground = { Color = "#c6a0f6" } },
-      { Text = first_tab and "" or SOLID_LEFT_ARROW },
-      { Background = { Color = "#c6a0f6" } },
-      { Foreground = { Color = "#313244" } },
-      { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-      { Background = { Color = "#24273a" } },
-      { Foreground = { Color = "#c6a0f6" } },
-      { Text = last_tab and "" or SOLID_RIGHT_ARROW },
-    }
-  else
-    return {
-      { Background = { Color = "#24273a" } },
-      { Foreground = { Color = "#a6adc8" } },
-      { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-      { Background = { Color = "#24273a" } },
-      { Foreground = { Color = "#c6a0f6" } },
-      { Text = last_tab and "" or SOLID_RIGHT_ARROW_INVERSE .. SOLID_RIGHT_ARROW },
-    }
-  end
-end)
+--   if tab.tab_index < active_tab_index then
+--     return {
+--       { Background = { Color = "#24273a" } },
+--       { Foreground = { Color = "#c6a0f6" } },
+--       { Text = first_tab and "" or SOLID_LEFT_ARROW .. SOLID_LEFT_ARROW_INVERSE },
+--       { Background = { Color = "#24273a" } },
+--       { Foreground = { Color = "#a6adc8" } },
+--       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
+--     }
+--   elseif tab.tab_index == active_tab_index then
+--     return {
+--       { Background = { Color = "#24273a" } },
+--       { Foreground = { Color = "#c6a0f6" } },
+--       { Text = first_tab and "" or SOLID_LEFT_ARROW },
+--       { Background = { Color = "#c6a0f6" } },
+--       { Foreground = { Color = "#313244" } },
+--       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
+--       { Background = { Color = "#24273a" } },
+--       { Foreground = { Color = "#c6a0f6" } },
+--       { Text = last_tab and "" or SOLID_RIGHT_ARROW },
+--     }
+--   else
+--     return {
+--       { Background = { Color = "#24273a" } },
+--       { Foreground = { Color = "#a6adc8" } },
+--       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
+--       { Background = { Color = "#24273a" } },
+--       { Foreground = { Color = "#c6a0f6" } },
+--       { Text = last_tab and "" or SOLID_RIGHT_ARROW_INVERSE .. SOLID_RIGHT_ARROW },
+--     }
+--   end
+-- end)
 
 
 -- font settings
@@ -127,12 +110,15 @@ config.font = wezterm.font(
   { family = "ZedMono NFP", weight="Medium", stretch="Expanded", style="Normal" }
   -- { family = "Hasklug Nerd Font Propo", weight = "Medium", stretch = "Expanded", style="Normal"}
   -- { family = "JetBrainsMono NFP", weight = "Regular", stretch = "Expanded", style = "Normal" }
-  -- "ZedMono NFM", 
-  -- "ZedMono NF"
 )
 config.harfbuzz_features = { 
-  -- "ss08=1",  -- pragmata prop style
-  -- "ss12=1",  -- ubuntu style 
+  -- "ss05=1",  -- Fira Mono styl
+  -- "ss07=1",  -- Moncao style
+  -- "ss08=1",  -- Pragmata Pro style
+  -- "ss12=1",  -- Ubuntu style 
+  -- "ss14=1",  -- Jetbrains Mono style
+  -- "ss15=1",  -- IBM Plex Mono style
+  "ss17=1",  -- Recursive Mono style
 }
 -- config.font_size = 12.25
 config.font_size = 12.25
@@ -168,5 +154,12 @@ config.keys = {
   { key = 'r', mods = 'LEADER', action = action.RotatePanes 'Clockwise' },
 }
 
+config.serial_ports = {
+  {
+    name = "Basys3",
+    port = "COM22",
+    baud = 115200,
+  }
+}
 
 return config
