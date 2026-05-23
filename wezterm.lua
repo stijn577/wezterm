@@ -9,6 +9,7 @@ config.default_prog = { "C:/Users/Stijn_Admin/AppData/Local/Programs/nu/bin/nu.e
 
 -- theme and background settings
 config.color_scheme = "Catppuccin Macchiato"
+config.adjust_window_size_when_changing_font_size = false
 
 -- renderer
 config.front_end = "OpenGL"
@@ -217,5 +218,6 @@ config.keys = {
   -- rotate panes
   { key = 'r', mods = 'LEADER', action = action.RotatePanes 'Clockwise' },
 }
+
 
 return config
