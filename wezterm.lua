@@ -10,6 +10,10 @@ config.default_prog = { "C:/Users/Stijn_Admin/AppData/Local/Programs/nu/bin/nu.e
 -- theme and background settings
 config.color_scheme = "Catppuccin Macchiato"
 config.adjust_window_size_when_changing_font_size = false
+config.colors = {
+  selection_bg = "#8aadf4",
+  selection_fg = "#24273a"
+}
 
 -- renderer
 config.front_end = "OpenGL"
@@ -139,7 +143,7 @@ end)
 
 
 config.font = wezterm.font(
-  { family="Iosevka Nerd Font Mono", weight="Regular", stretch="Normal", style="Normal" }
+  { family="Iosevka Nerd Font Propo", weight="Regular", stretch="Normal", style="Normal" }
 )
 config.font_size = 13
 
