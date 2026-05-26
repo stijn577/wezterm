@@ -4,7 +4,8 @@ local config = wezterm.config_builder()
 local action = wezterm.action
 
 -- startup program
-config.default_prog = { "C:/Users/Stijn_Admin/AppData/Local/Programs/nu/bin/nu.exe -l" }
+-- config.default_prog = { "C:/Users/stijn/AppData/Local/Programs/nu/bin/nu.exe" }
+config.default_prog = { "nu.exe -l" }
 
 
 -- theme and background settings
