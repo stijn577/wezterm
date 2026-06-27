@@ -9,11 +9,21 @@ config.default_prog = { "nu.exe -l" }
 
 
 -- theme and background settings
-config.color_scheme = "Catppuccin Macchiato"
+config.color_scheme = "Catppuccin Mocha"
 config.adjust_window_size_when_changing_font_size = false
 config.colors = {
   selection_bg = "#8aadf4",
-  selection_fg = "#24273a"
+  selection_fg = "#24273a",
+  tab_bar = {
+    active_tab = {
+      bg_color  = "#89b4fa",
+      fg_color = "#24273a"
+    },
+    inactive_tab = {
+      bg_color  = "#24273a",
+      fg_color = "#89b4fa"
+    }
+  }
 }
 
 -- renderer
@@ -40,7 +50,7 @@ config.window_padding = {
 local opacity_local = 1.0
 config.window_background_opacity = opacity_local
 
-local increase_opacity = function(window, pane)
+local increase_opacity = function(window, _)
   opacity_local = opacity_local + 0.05
   if opacity_local > 1.0 then
     opacity_local = 1.0
@@ -48,7 +58,7 @@ local increase_opacity = function(window, pane)
   window:set_config_overrides({ window_background_opacity = opacity_local })
 end
 
-local decrease_opacity =  function(window, pane)
+local decrease_opacity =  function(window, _)
   opacity_local = opacity_local - 0.05
   if opacity_local < 0.1 then
     opacity_local = 0.1
@@ -65,21 +75,14 @@ config.tab_bar_at_bottom = true
 config.tab_max_width = 1000
 
 -- tab bar style scripting
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-  local get_active_tab_index = function(tabs)
-    for _, t in pairs(tabs) do
+wezterm.on("format-tab-title", function(tab, tabs, _, _, _, _)
+  local get_active_tab_index = function(tabs_pairs)
+    for _, t in pairs(tabs_pairs) do
       if t.is_active then
         return t.tab_index
       end
     end
   end
-
-  local custom = wezterm.color.get_builtin_schemes()[config.color_scheme]
-  local_tab_bar_bg = custom.tab_bar.background
-  active_tab_bg = custom.tab_bar.active_background
-  active_tab_bg = custom.tab_bar.active_foreground
-  local_tab_bar_bg = custom.tab_bar.background
-  local_tab_bar_bg = custom.tab_bar.background
 
   local SOLID_LEFT_ARROW = wezterm.nerdfonts.pl_right_hard_divider
   local SOLID_RIGHT_ARROW = wezterm.nerdfonts.pl_left_hard_divider
@@ -98,33 +101,33 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 
   if tab.tab_index < active_tab_index then
     return {
-      -- { Background = { Color = custom.tab_bar.inactive_tab.bg_color } },
-      -- { Foreground = { Color = custom.tab_bar.inactive_tab.fg_color } },
+      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
+      { Foreground = { Color = config.colors.tab_bar.inactive_tab.fg_color } },
       { Text = first_tab and "" or SOLID_LEFT_ARROW .. SOLID_LEFT_ARROW_INVERSE },
-      -- { Background = { Color = custom.tab_bar.inactive_tab.bg_color } },
-      -- { Foreground = { Color = custom.tab_bar.inactive_tab.fg_color } },
+      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
+      { Foreground = { Color = config.colors.tab_bar.inactive_tab.fg_color } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
     }
   elseif tab.tab_index == active_tab_index then
     return {
-      { Background = { Color = custom.tab_bar.inactive_tab.bg_color } },
-      { Foreground = { Color = custom.tab_bar.active_tab.bg_color } },
+      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
+      { Foreground = { Color = config.colors.tab_bar.active_tab.bg_color } },
       { Text = first_tab and "" or SOLID_LEFT_ARROW },
-      { Background = { Color = custom.tab_bar.active_tab.bg_color } },
-      { Foreground = { Color = custom.tab_bar.active_tab.fg_color } },
+      { Background = { Color = config.colors.tab_bar.active_tab.bg_color } },
+      { Foreground = { Color = config.colors.tab_bar.active_tab.fg_color } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-      { Background = { Color = custom.tab_bar.inactive_tab.bg_color } },
-      { Foreground = { Color = custom.tab_bar.active_tab.bg_color } },
+      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
+      { Foreground = { Color = config.colors.tab_bar.active_tab.bg_color } },
       { Text = last_tab and "" or SOLID_RIGHT_ARROW },
     }
   else
     return {
-      -- { Background = { Color = "#24273a" } },
-      -- { Foreground = { Color = "#a6adc8" } },
+      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
+      { Foreground = { Color = config.colors.tab_bar.inactive_tab.fg_color } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-      -- { Background = { Color = "#24273a" } },
-      -- { Foreground = { Color = "#c6a0f6" } },
-      { Text = last_tab and "" or SOLID_RIGHT_ARROW_INVERSE .. SOLID_RIGHT_ARROW },
+      { Background = { Color = config.colors.tab_bar.active_tab.fg_color } },
+      { Foreground = { Color = config.colors.tab_bar.active_tab.bg_color  } },
+      { Text = last_tab and "" or SOLID_RIGHT_ARROW_INVERSE .. SOLID_RIGHT_ARROW }
     }
   end
 end)
