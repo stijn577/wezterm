@@ -7,25 +7,21 @@ local action = wezterm.action
 -- config.default_prog = { "C:/Users/stijn/AppData/Local/Programs/nu/bin/nu.exe" }
 config.default_prog = { "nu.exe -l" }
 
-
 -- theme and background settings
 config.color_scheme = "Catppuccin Mocha"
+config.colors = wezterm.color.get_builtin_schemes()[config.color_scheme]
 config.adjust_window_size_when_changing_font_size = false
-config.colors = {
-  selection_bg = "#8aadf4",
-  selection_fg = "#24273a",
-  tab_bar = {
-    active_tab = {
-      bg_color  = "#89b4fa",
-      fg_color = "#24273a"
-    },
-    inactive_tab = {
-      bg_color  = "#24273a",
-      fg_color = "#89b4fa"
-    }
-  }
-}
 
+if config.color_scheme == "Catppuccin Mocha" then
+  config.colors.selection_bg = "#89b4fa"
+  config.colors.selection_fg = "#1e1e2e"
+elseif config.color_scheme == "Catppuccin Macchiato" then
+  config.colors.selection_bg = "#8aadf4"
+  config.colors.selection_fg = "#24273a"
+elseif config.color_scheme == "Catppuccin Latte" then
+  config.colors.selection_bg = "#1e66f5"
+  config.colors.selection_fg = "#eff1f5"
+end
 -- renderer
 config.front_end = "OpenGL"
 config.max_fps = 144
@@ -75,7 +71,8 @@ config.tab_bar_at_bottom = true
 config.tab_max_width = 1000
 
 -- tab bar style scripting
-wezterm.on("format-tab-title", function(tab, tabs, _, _, _, _)
+wezterm.on("format-tab-title", function(tab, tabs, _, colors, _, _)
+  wezterm.log_info("format tab title")
   local get_active_tab_index = function(tabs_pairs)
     for _, t in pairs(tabs_pairs) do
       if t.is_active then
@@ -87,7 +84,7 @@ wezterm.on("format-tab-title", function(tab, tabs, _, _, _, _)
   local SOLID_LEFT_ARROW = wezterm.nerdfonts.pl_right_hard_divider
   local SOLID_RIGHT_ARROW = wezterm.nerdfonts.pl_left_hard_divider
   local SOLID_LEFT_ARROW_INVERSE = ""
-  local SOLID_RIGHT_ARROW_INVERSE = ""  
+  local SOLID_RIGHT_ARROW_INVERSE = ""
 
   local title = tab.active_pane.title
   local active_tab_index = get_active_tab_index(tabs)
@@ -110,14 +107,14 @@ wezterm.on("format-tab-title", function(tab, tabs, _, _, _, _)
     }
   elseif tab.tab_index == active_tab_index then
     return {
-      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
+      { Background = { Color = config.colors.tab_bar.active_tab.fg_color } },
       { Foreground = { Color = config.colors.tab_bar.active_tab.bg_color } },
       { Text = first_tab and "" or SOLID_LEFT_ARROW },
       { Background = { Color = config.colors.tab_bar.active_tab.bg_color } },
       { Foreground = { Color = config.colors.tab_bar.active_tab.fg_color } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
-      { Foreground = { Color = config.colors.tab_bar.active_tab.bg_color } },
+      { Background = { Color = config.colors.tab_bar.active_tab.fg_color } },
+      { Foreground = { Color = config.colors.tab_bar.active_tab.bg_color  } },
       { Text = last_tab and "" or SOLID_RIGHT_ARROW },
     }
   else
@@ -125,36 +122,18 @@ wezterm.on("format-tab-title", function(tab, tabs, _, _, _, _)
       { Background = { Color = config.colors.tab_bar.inactive_tab.bg_color } },
       { Foreground = { Color = config.colors.tab_bar.inactive_tab.fg_color } },
       { Text = " " .. (tab.tab_index + 1) .. ": " .. title .. " " },
-      { Background = { Color = config.colors.tab_bar.active_tab.fg_color } },
-      { Foreground = { Color = config.colors.tab_bar.active_tab.bg_color  } },
+      { Background = { Color = config.colors.tab_bar.inactive_tab.bg_coloreconfig.colors.tab_bar.inactive_tab.fg_color } },
+      { Foreground = { Color =  config.colors.tab_bar.active_tab.fg_color    } },
       { Text = last_tab and "" or SOLID_RIGHT_ARROW_INVERSE .. SOLID_RIGHT_ARROW }
     }
   end
 end)
 
 
--- font settings
--- jetbrains mono font config
--- config.font = wezterm.font(
---   { family = "JetBrainsMono NFP", weight = "Regular", stretch = "Normal", style = "Normal" }
--- )
--- config.font_size = 12
--- zedmono font config
--- config.font = wezterm.font(
---   { family = "ZedMono NFP", weight="Regular", stretch="Normal", style="Normal" } 
--- )
--- config.font_size = 20
-
-
 config.font = wezterm.font(
   { family="Iosevka Nerd Font Propo", weight="Regular", stretch="Normal", style="Normal" }
 )
 config.font_size = 13
-
--- config.font = wezterm.font(
---   { family="Hack", weight="Regular", stretch="Normal", style="Normal" }
--- )
--- config.font_size = 12
 
 config.harfbuzz_features = { 
   -- "ss05=1",  -- Fira Mono style
@@ -165,37 +144,6 @@ config.harfbuzz_features = {
   -- "ss15=1",  -- IBM Plex Mono style
   -- "ss17=1",  -- Recursive Mono style
 }
-
--- config.font = wezterm.font(
---   { family = "FiraCode Nerd Font", weight = "Regular", stretch = "Normal", style = "Normal" } 
--- )
--- config.font_size = 11
-
--- config.font = wezterm.font (
---   { family = "Geist Mono", weight = "Medium", stretch = "Normal", style = "Normal" }
--- )
--- config.font_size = 12
-  
--- config.font = wezterm.font (
---   { family = "Hasklug Nerd Font Propo", weight = "Regular", stretch = "Normal", style = "Normal" }
--- )
--- config.font_size = 12
-
--- config.font = wezterm.font (
---   { family = "Lilex Nerd Font Propo", weight = "Regular", stretch = "Normal", style = "Normal" }
--- )
--- config.font_size = 12
-
--- config.font = wezterm.font (
---   { family = "Twilio Sans Mono", weight = "Regular", stretch = "Normal", style = "Normal" }
--- )
--- config.font_size = 12
-
--- config.font = wezterm.font (
---   { family = "VictorMono NFP", weight = "Medium", stretch = "Normal", style = "Normal" }
--- )
--- config.font_size = 12
-
 
 -- keymaps
 config.leader = { key = 'q', mods = 'ALT', timeout_milliseconds = 2000 }
